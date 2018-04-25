@@ -12,7 +12,8 @@ namespace RESTfullAPI_1.Entities
            : base(options)
         {
             Database.Migrate();
-            this.EnsureSeedDataForContext();
+            //this.EnsureSeedDataForContext();
+            
         }
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
