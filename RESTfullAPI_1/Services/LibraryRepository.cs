@@ -9,10 +9,14 @@ namespace RESTfullAPI_1.Services
     public class LibraryRepository : ILibraryRepository
     {
         private LibraryContext _context;
-
+                
         public LibraryRepository(LibraryContext context)
         {
             _context = context;
+            if(!context.Authors.Any())
+            {
+                context.EnsureSeedDataForContext();
+            }
         }
 
         public void AddAuthor(Author author)

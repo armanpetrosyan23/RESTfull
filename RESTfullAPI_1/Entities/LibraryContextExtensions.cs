@@ -11,7 +11,10 @@ namespace RESTfullAPI_1.Entities
         {
             // first, clear the database.  This ensures we can always start 
             // fresh with each demo.  Not advised for production environments, obviously :-)
-
+            if(context.Database.EnsureCreated())
+            {
+                
+            }
             context.Authors.RemoveRange(context.Authors);
             context.SaveChanges();
 

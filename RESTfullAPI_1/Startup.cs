@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using RESTfullAPI_1.Entities;
+using RESTfullAPI_1.Models;
 using RESTfullAPI_1.Services;
+using RESTfullAPI_1.Helpers;
 
 namespace RESTfullAPI_1
 {
@@ -28,23 +31,26 @@ namespace RESTfullAPI_1
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILibraryRepository rep)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            string aut = "";
-
-            foreach (var item in rep.GetAuthors())
+            else
             {
-                aut += (item + "<br/>");
+                app.UseExceptionHandler();
             }
-            var one = rep.GetAuthors().ToList();
+            AutoMapper.Mapper.Initialize(m => m.CreateMap<Author, AuthorDto>()
+            .ForMember(dest => dest.Name, p => p.MapFrom(l => $"{l.FirstName} {l.LastName}"))
+            .ForMember(dat => dat.Age, p => p.MapFrom(t => t.DateOfBirth.GetCurrentAge()))
+            .ForMember(genre=>genre.Genre,p=>p.MapFrom(t=>t.Genre))
+            .ForMember(id=>id.Id,i=>i.MapFrom(t=>t.Id))
+            );
 
-            app.Run(async (context) =>
-            {
-                
-                await context.Response.WriteAsync(aut);
-            });
+            // app.UseMvc();
+            app.UseMvcWithDefaultRoute();
+           
+
         }
     }
 }
