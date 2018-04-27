@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using RESTfullAPI_1.Helpers;
 using AutoMapper;
 
+
 namespace RESTfullAPI_1.Controllers
 {
      [Route("api/authors")]
@@ -27,16 +28,24 @@ namespace RESTfullAPI_1.Controllers
             var authorFromRepo=_repository.GetAuthors();
             var list = Mapper.Map<IEnumerable<AuthorDto>>(authorFromRepo);
 
-            return new JsonResult(list);
+            return Ok(list);
         }
+
         [HttpGet("{id}")]
         public IActionResult GetAuthor(Guid id)
-        {
-            var authorFromRepo = _repository.GetAuthor(id);
-            var authordto = Mapper.Map<AuthorDto>(authorFromRepo);
-            return new JsonResult(authordto);
-           
+        {  
+                var authorFromRepo = _repository.GetAuthor(id);
+                if (authorFromRepo == null)
+                {
+                    return NotFound();
+                }
+
+                var authordto = Mapper.Map<AuthorDto>(authorFromRepo);
+                return Ok(authordto);
+            
         }
+
+
     }
 }
  

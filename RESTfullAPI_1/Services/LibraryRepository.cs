@@ -79,7 +79,7 @@ namespace RESTfullAPI_1.Services
             return _context.Authors.Where(a => authorIds.Contains(a.Id))
                 .OrderBy(a => a.FirstName)
                 .OrderBy(a => a.LastName)
-                .ToList();
+                .ToList(); 
         }
 
         public void UpdateAuthor(Author author)

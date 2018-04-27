@@ -12,6 +12,7 @@ using RESTfullAPI_1.Entities;
 using RESTfullAPI_1.Models;
 using RESTfullAPI_1.Services;
 using RESTfullAPI_1.Helpers;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace RESTfullAPI_1
 {
@@ -21,9 +22,13 @@ namespace RESTfullAPI_1
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc(setup => {
+                setup.ReturnHttpNotAcceptable = false;
+                setup.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+
+                });
             
-            services.AddDbContext<LibraryContext>(o => o.UseSqlServer("Data Source=DESKTOP-HNVF6ET;Initial Catalog=MyTestDB;Integrated Security=True"));
+            services.AddDbContext<LibraryContext>(o =>  o.UseSqlServer("Data Source=DESKTOP-HNVF6ET;Initial Catalog=MyTestDB;Integrated Security=True"));
             
             services.AddScoped<ILibraryRepository, LibraryRepository>();
         }
@@ -40,6 +45,7 @@ namespace RESTfullAPI_1
             {
                 app.UseExceptionHandler();
             }
+
             AutoMapper.Mapper.Initialize(m => m.CreateMap<Author, AuthorDto>()
             .ForMember(dest => dest.Name, p => p.MapFrom(l => $"{l.FirstName} {l.LastName}"))
             .ForMember(dat => dat.Age, p => p.MapFrom(t => t.DateOfBirth.GetCurrentAge()))
