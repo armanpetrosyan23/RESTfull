@@ -12,7 +12,7 @@ namespace RESTfullAPI_1.Models
         public int Age { get; set; }
         public string  Genre { get; set; }
 
-       // public ICollection<BookDto> Books { get; set; }
+      //  public ICollection<BookDto> Books { get; set; }
         
         
 

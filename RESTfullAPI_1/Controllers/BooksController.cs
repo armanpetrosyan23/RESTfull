@@ -7,7 +7,7 @@ using RESTfullAPI_1.Entities;
 
 namespace RESTfullAPI_1.Controllers
 {
-    [Route("api/[Controller]/{authorid}/books")]
+    [Route("api/author/{authorid}/books")]
     public class BooksController:Controller
     {
         private ILibraryRepository _repository;
@@ -33,8 +33,8 @@ namespace RESTfullAPI_1.Controllers
         }
     
 
-        [HttpGet("{id}",Name ="GetBooksForAuthor")]
-        public IActionResult GetBooksForAuthor(Guid authorid, Guid id)
+        [HttpGet("{id}",Name ="GetBookForAuthor")]
+        public IActionResult GetBookForAuthor(Guid authorid, Guid id)
         {
             var authorFromRepo = _repository.GetBookForAuthor(authorid, id);
 
@@ -65,6 +65,7 @@ namespace RESTfullAPI_1.Controllers
             {
                 return NotFound("Internal error");
             }
+
             BookDto dto = Mapper.Map<BookDto>(b);
             CreatedAtRouteResult resault=CreatedAtRoute("GetBooksForAuthor", new {authorid , id = b.Id },dto);
 
@@ -72,3 +73,4 @@ namespace RESTfullAPI_1.Controllers
         }
     }
 }
+ 

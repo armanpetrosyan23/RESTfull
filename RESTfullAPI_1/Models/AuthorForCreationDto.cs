@@ -13,8 +13,8 @@ namespace RESTfullAPI_1.Models
         public DateTimeOffset DateOfBirth { get; set; }
         public string Genre { get; set; }
 
-        //public List<Book> Books { get; set; } 
-        //    = new List<Book>();
+        public List<BookForCreationDto> Books { get; set; } 
+           = new List<BookForCreationDto>();
 
     }
 }

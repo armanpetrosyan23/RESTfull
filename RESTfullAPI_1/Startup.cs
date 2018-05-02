@@ -77,10 +77,12 @@ namespace RESTfullAPI_1
                 .ForMember(dat => dat.Age, p => p.MapFrom(t => t.DateOfBirth.GetCurrentAge()))
                 .ForMember(genre => genre.Genre, p => p.MapFrom(t => t.Genre))
                 .ForMember(id => id.Id, i => i.MapFrom(t => t.Id));
+               
                 
                 m.CreateMap<AuthorForCreationDto, Author>();
                 m.CreateMap<BookDto,Book>();
                 m.CreateMap<BookForCreationDto,Book>();
+                m.CreateMap<AuthorDto, AuthorForCreationDto>();
             }
             );
         
