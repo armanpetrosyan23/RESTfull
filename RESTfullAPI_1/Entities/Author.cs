@@ -28,8 +28,8 @@ namespace RESTfullAPI_1.Entities
         [MaxLength(50)]
         public string Genre { get; set; }
 
-        public ICollection<Book> Books { get; set; }
-            = new List<Book>();
+        public List<Book> Books { get; set; }
+         = new List<Book>();
 
         public override string ToString()
         {

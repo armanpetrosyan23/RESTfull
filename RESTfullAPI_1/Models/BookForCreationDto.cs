@@ -5,17 +5,10 @@ using System.Threading.Tasks;
 
 namespace RESTfullAPI_1.Models
 {
-    public class BookDto
+    public class BookForCreationDto
     {
-
-     
-        public Guid Id { get; set; }
-
         public string Title { get; set; }
-               
         public string Description { get; set; }
-
-        public Guid AuthorId { get; set; }
 
     }
 }

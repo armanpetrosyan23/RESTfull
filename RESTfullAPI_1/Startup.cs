@@ -13,6 +13,10 @@ using RESTfullAPI_1.Models;
 using RESTfullAPI_1.Services;
 using RESTfullAPI_1.Helpers;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
 
 namespace RESTfullAPI_1
 {
@@ -22,12 +26,32 @@ namespace RESTfullAPI_1
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(setup => {
-                setup.ReturnHttpNotAcceptable = false;
-                setup.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+            services.AddMvc()
+            .AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ContractResolver =
+                new CamelCasePropertyNamesContractResolver();
+            });
 
-                });
+            // register the DbContext on the container, getting the connection string from
+            // appSettings (note: use this during development; in a production environment,
+            // it's better to store the connection string in an environment variable)
+          
+
+            // register the repository
+            services.AddScoped<ILibraryRepository, LibraryRepository>();
+
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
+            services.AddScoped<IUrlHelper>(implementationFactory =>
+            {
+                var actionContext = implementationFactory.GetService<IActionContextAccessor>()
+                .ActionContext;
+                return new UrlHelper(actionContext);
+            });
+
             
+
             services.AddDbContext<LibraryContext>(o =>  o.UseSqlServer("Data Source=DESKTOP-HNVF6ET;Initial Catalog=MyTestDB;Integrated Security=True"));
             
             services.AddScoped<ILibraryRepository, LibraryRepository>();
@@ -46,15 +70,23 @@ namespace RESTfullAPI_1
                 app.UseExceptionHandler();
             }
 
-            AutoMapper.Mapper.Initialize(m => m.CreateMap<Author, AuthorDto>()
-            .ForMember(dest => dest.Name, p => p.MapFrom(l => $"{l.FirstName} {l.LastName}"))
-            .ForMember(dat => dat.Age, p => p.MapFrom(t => t.DateOfBirth.GetCurrentAge()))
-            .ForMember(genre=>genre.Genre,p=>p.MapFrom(t=>t.Genre))
-            .ForMember(id=>id.Id,i=>i.MapFrom(t=>t.Id))
+            AutoMapper.Mapper.Initialize(m =>
+            {
+                m.CreateMap<Author, AuthorDto>()
+                .ForMember(dest => dest.Name, p => p.MapFrom(l => $"{l.FirstName} {l.LastName}"))
+                .ForMember(dat => dat.Age, p => p.MapFrom(t => t.DateOfBirth.GetCurrentAge()))
+                .ForMember(genre => genre.Genre, p => p.MapFrom(t => t.Genre))
+                .ForMember(id => id.Id, i => i.MapFrom(t => t.Id));
+                
+                m.CreateMap<AuthorForCreationDto, Author>();
+                m.CreateMap<BookDto,Book>();
+                m.CreateMap<BookForCreationDto,Book>();
+            }
             );
+        
 
-            // app.UseMvc();
-            app.UseMvcWithDefaultRoute();
+            app.UseMvc();
+         
            
 
         }

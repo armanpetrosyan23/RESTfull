@@ -56,6 +56,8 @@ namespace RESTfullAPI_1.Services
 
         public void DeleteAuthor(Author author)
         {
+            //List<Author> a = _context.Authors.Where(p => p.Id == author.Id).ToList();
+            //_context.Authors.RemoveRange(a);
             _context.Authors.Remove(author);
         }
 
