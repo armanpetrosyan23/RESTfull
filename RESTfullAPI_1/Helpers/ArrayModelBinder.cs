@@ -22,7 +22,7 @@ namespace RESTfullAPI_1.Helpers
                 .GetValue(bindingContext.ModelName)
                 .ToString();
 
-            if (!string.IsNullOrEmpty(value))
+            if (string.IsNullOrEmpty(value))
             {
                 bindingContext.Result = ModelBindingResult.Success(null);
                 return Task.CompletedTask;
@@ -34,7 +34,7 @@ namespace RESTfullAPI_1.Helpers
                 .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => converter.ConvertFromString(x.Trim()))
                 .ToArray();
-            var typedvalues = Array.CreateInstance(elementtype, value.Length);
+            var typedvalues = Array.CreateInstance(elementtype, values.Length);
             values.CopyTo(typedvalues, 0);
             bindingContext.Model = typedvalues;
 

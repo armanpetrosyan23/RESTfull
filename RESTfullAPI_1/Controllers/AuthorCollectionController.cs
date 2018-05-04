@@ -40,13 +40,15 @@ namespace RESTfullAPI_1.Controllers
             {
                 return NotFound("Internal error");
             }
-             
 
-            return Ok();
+            var param = string.Join(',', authorentities.Select(x => x.Id.ToString()));   
+
+
+            return CreatedAtRoute("GetAuthorCollection", new { ids=param},param);
         }
 
 
-        [HttpGet("({ids})",Name ="Get")]
+        [HttpGet("({ids})",Name = "GetAuthorCollection")]
         public IActionResult GetAuthorCollection
             ([ModelBinder(binderType:typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
         {
