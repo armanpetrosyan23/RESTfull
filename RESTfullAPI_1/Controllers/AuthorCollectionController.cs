@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using RESTfullAPI_1.Models;
 using AutoMapper;
 using RESTfullAPI_1.Entities;
+using RESTfullAPI_1.Helpers;
 
 namespace RESTfullAPI_1.Controllers
 {
@@ -39,9 +40,30 @@ namespace RESTfullAPI_1.Controllers
             {
                 return NotFound("Internal error");
             }
-            
+             
 
             return Ok();
+        }
+
+
+        [HttpGet("({ids})",Name ="Get")]
+        public IActionResult GetAuthorCollection
+            ([ModelBinder(binderType:typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
+        {
+            if (ids==null)
+            {
+                return BadRequest();
+            }
+
+            var authorEntities = repo.GetAuthors(ids);
+
+            if (ids.Count()!=authorEntities.Count())
+            {
+                return NotFound();
+            }
+
+            var authorforReturn = Mapper.Map<IEnumerable<AuthorDto>>(authorEntities);
+            return Ok(authorforReturn);
         }
     }
 }
