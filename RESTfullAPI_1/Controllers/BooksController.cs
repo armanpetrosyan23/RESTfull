@@ -45,7 +45,28 @@ namespace RESTfullAPI_1.Controllers
 
             return Ok(authorFromRepo);
         }
+        [HttpDelete("{id}")]
+        public IActionResult DeleteBookForAuthor(Guid authorid, Guid id)
+        {
+            if (!_repository.AuthorExists(authorid)) 
+            {
+                return NotFound();
+            }
 
+            var bookforauthor = _repository.GetBookForAuthor(authorid, id);
+            if (bookforauthor==null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _repository.DeleteBook(bookforauthor);
+                _repository.Save();
+                return NoContent();
+            }
+
+        }
+        
         [HttpPost]
         public IActionResult CreateBookForAuthor(Guid authorid,
             [FromBody] BookForCreationDto book)
@@ -61,6 +82,7 @@ namespace RESTfullAPI_1.Controllers
             }
             Book b = Mapper.Map<Book>(book);
             _repository.AddBookForAuthor(authorid, b);
+
             if (!_repository.Save())
             {
                 return NotFound("Internal error");

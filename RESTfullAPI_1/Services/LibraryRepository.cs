@@ -1,6 +1,8 @@
-﻿using RESTfullAPI_1.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using RESTfullAPI_1.Entities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -48,6 +50,15 @@ namespace RESTfullAPI_1.Services
                 author.Books.Add(book);
             }
         }
+
+        public IEnumerable<Author> GetAuthorsWithBooks()
+        {
+
+            var query= _context.Authors.Include(p=>p.Books).ToList();
+           
+            return query;
+        }
+
 
         public bool AuthorExists(Guid authorId)
         {

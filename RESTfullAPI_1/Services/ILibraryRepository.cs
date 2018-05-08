@@ -16,6 +16,8 @@ namespace RESTfullAPI_1.Services
         void UpdateAuthor(Author author);
         bool AuthorExists(Guid authorId);
         IEnumerable<Book> GetBooksForAuthor(Guid authorId);
+
+        IEnumerable<Author> GetAuthorsWithBooks();
         Book GetBookForAuthor(Guid authorId, Guid bookId);
         void AddBookForAuthor(Guid authorId, Book book);
         void UpdateBookForAuthor(Book book);

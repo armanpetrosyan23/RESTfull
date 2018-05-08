@@ -52,6 +52,7 @@ namespace RESTfullAPI_1.Controllers
         public IActionResult GetAuthorCollection
             ([ModelBinder(binderType:typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
         {
+            
             if (ids==null)
             {
                 return BadRequest();
@@ -67,5 +68,12 @@ namespace RESTfullAPI_1.Controllers
             var authorforReturn = Mapper.Map<IEnumerable<AuthorDto>>(authorEntities);
             return Ok(authorforReturn);
         }
+        [HttpGet]
+        public IActionResult GetAuthorsWithBooks()
+        {
+            var t = repo.GetAuthorsWithBooks();
+            return Ok(t);            
+        }
+
     }
 }

@@ -28,7 +28,7 @@ namespace RESTfullAPI_1.Entities
         [MaxLength(50)]
         public string Genre { get; set; }
 
-        public List<Book> Books { get; set; }
+        public virtual List<Book> Books { get; set; }
          = new List<Book>();
 
         public override string ToString()

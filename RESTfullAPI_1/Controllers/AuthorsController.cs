@@ -46,26 +46,7 @@ namespace RESTfullAPI_1.Controllers
             return new JsonResult(authordto);
 
         }
-        [HttpDelete("{id}")]
-        public IActionResult DeleteAuthor(Guid id)
-        {
-            Author aut = _repository.GetAuthor(id); 
-            if (aut!=null)
-            {
-                _repository.DeleteAuthor(aut);
-            }
-            else
-            {
-                return BadRequest("Auhtor alredy deleted or doesn't exist");
-            }
-            
-            if(!_repository.Save())
-            {
-                return BadRequest("no Author");
-            }
-            return Ok("Author deleted");
-        }
-      
+       
 
         [HttpPost]
         public IActionResult CreateAuthor([FromBody]AuthorForCreationDto author)
@@ -74,7 +55,6 @@ namespace RESTfullAPI_1.Controllers
             {
                 return BadRequest();
             }
-
 
             Author a = Mapper.Map<Author>(author);
             
@@ -92,7 +72,31 @@ namespace RESTfullAPI_1.Controllers
             return CreatedAtRoute("GetAuthor",new { id=authorforreturn.Id},authorforreturn);
 
         }
+        [HttpPost("{id}")]
+        public IActionResult BlockAuthorCollection(Guid id)
+        {
+            if (_repository.AuthorExists(id))
+            {
+                return new StatusCodeResult(409);
+            }
+            return NotFound();
+        }
 
+        [HttpDelete("{id}")]
+        public IActionResult DeleteAuthor(Guid id)
+        {
+            var author = _repository.GetAuthor(id);
+            if (author==null)
+            {
+                return NotFound();
+            }
+            _repository.DeleteAuthor(author);
+            if (!_repository.Save())
+            {
+                throw new Exception("Not found author");
+            }
 
+            return Ok();
+        }
     }
 }

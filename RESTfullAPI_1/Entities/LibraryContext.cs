@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,15 @@ namespace RESTfullAPI_1.Entities
     {
         public LibraryContext(DbContextOptions<LibraryContext> options)
            : base(options)
-        {
-            Database.Migrate();
+        {           
+            Database.Migrate(); 
+           
                        
         }
-        public DbSet<Author> Authors { get; set; }
-        public DbSet<Book> Books { get; set; }
+    
+
+        public  DbSet<Author> Authors { get; set; }
+        public  DbSet<Book> Books { get; set; }
 
     }
 }
